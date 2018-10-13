@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ author }}{% endblock %}
+
+{% block content %}
+    {% if author.photo %}
+        <img src='{{ MEDIA_URL }}{{ author.photo.url }}'
+             class="fullsize"/>
+    {% endif %}
+
+    <h3>{{ author }}</h3>
+    <dl>
+        <dt>Name</dt>
+        <dd>{{ author }}</dd>
+    </dl>
+
+    <h3>Books written</h3>
+    <ul>
+        {% for book in author.book_set.all %}
+            <li><a href='{% url 'book' book_id=book.id %}'>{{ book }}</a></li>
+        {% empty %}
+            <li>This author hasn't written anything</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

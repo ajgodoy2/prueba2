@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Account{% endblock %}
+
+{% block content %}
+    <p><h2>{{ user.username }}</h2>
+    <p><a href="{% url "password_change" %} ">Change password</a></p>
+    <dl>
+        <dt>E-mail</dt>
+        <dd>{{ user.email }}</dd>
+        {% if user.first_name or user.last_name %}
+            <dt>Name</dt>
+            <dd>{{ user.first_name }} {{ user.last_name }}</dd>
+        {% endif %}
+        <dt>Joined in</dt>
+        <dd>{{ user.date_joined|date:"DATE_FORMAT" }}</dd>
+    </dl>
+
+    <h3>Read books</h3>
+    <ul>
+        {% for book in user.reviewwriter.read_books.all %}
+            <li>
+                <a href="{% url 'book' book_id=book.id %}">{{ book }}</a>
+                (<a href="{% url 'delete_read' book_id=book.id %}">Delete</a>)
+            </li>
+        {% empty %}
+            <li>You haven't read any books.</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Reviews</h3>
+    <ul>
+        {% for review in user.reviewwriter.review_set.all %}
+            <li>
+                {{ review }}
+                <br><a href="{% url 'delete_review' book_id=review.book.id %}">Delete</a>
+            </li>
+        {% empty %}
+            <li>You haven't written any reviews.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

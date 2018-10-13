@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% block title %}Log out{% endblock %}
+
+{% block content %}
+    <p>{{ title }}</p>
+    <p><a href={% url "library.views.home" %}>Return to the home page</a></p>
+{% endblock %}

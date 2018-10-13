@@ -1,0 +1,46 @@
+{# book: Book to detail here #}
+{#  #}
+
+{% extends 'base.html' %}
+
+{% load extras %}
+
+{% block title %}{{ book }}{% endblock %}
+
+{% block content %}
+    {% if book.cover %}
+        <img src='{{ MEDIA_URL }}{{ book.cover.url }}'
+             class="fullsize"/>
+    {% endif %}
+
+    <h3>{{ book }} <small>{{ book.authors.all|listify }}</small></h3>
+    <dl>
+        <dt>Title</dt>
+        <dd>{{ book }}</dd>
+        <dt>Author{{ book.authors.all|length|pluralize }}</dt>
+        <dd>
+            {% for author in book.authors.all %}
+                <a href='{% url 'author' author_id=author.id %}'>{{ author }}</a>{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </dd>
+    </dl>
+
+    <p><a href={% url 'add_read' book_id=book.id %}>Add to read list</a></p>
+
+    <h3>Reviews</h3>
+
+    <p><a href="{% url 'add_review' book_id=book.id %}">Add review</a></p>
+    <ul>
+        {% for review in book.review_set.all %}
+            <li>
+                {{ review.writer }}: {{ review.rating }} of 5
+                {% if review.opinion %}
+                    <br>{{ review.opinion|linebreaks }}
+                {% endif %}
+            </li>
+        {% empty %}
+            <li>This book hasn't been reviewed.</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

@@ -1,0 +1,32 @@
+{# entity: Tuple[str,str] containing the singular and plural forms of the entity shown #}
+{# others: List[str] containing the other entities #}
+{# elems: List[??] containing the elements of the entity that match the search criteria #}
+
+{% extends 'base.html' %}
+
+{% block title %}Browse {{ entity.1 }}{% endblock %}
+
+{% block content %}
+    <h3>Search</h3>
+    <form method="get">
+        <select name="by">
+            <option selected
+                    value="{{ entity.0 }}">{{ entity.0|capfirst }}</option>
+            {% for other in others %}
+                <option value="{{ other }}">{{ other|capfirst }}</option>
+            {% endfor %}
+        </select>
+        <input type="text" name="q" title="Search query">
+        <input type="submit" value="Search">
+    </form>
+
+    <h3>{{ entity.0|capfirst }} list</h3>
+    <ul>
+        {% for elem in elems %}
+            <li><a href='/{{ entity.0 }}/{{ elem.id }}'>{{ elem }}</a></li>
+        {% empty %}
+            <li>No {{ entity.1 }} in record</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
